@@ -1,24 +1,53 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Colliebot.Api.Rest.Controllers.Discord
 {
     [Route("discord/users")]
-    public class TwitchUsersController : Controller
+    public class DiscordUsersController : Controller
     {
-        [HttpGet(Name = nameof(GetUsersAsync))]
-        public async Task<IActionResult> GetUsersAsync(DateTime? createdAt = null)
+        private readonly DiscordUserManager _users;
+
+        public DiscordUsersController(DiscordUserManager users)
         {
-            await Task.Delay(0);
-            return Ok();
+            _users = users;
+        }
+
+        [HttpGet(Name = nameof(GetUsersAsync))]
+        public async Task<IActionResult> GetUsersAsync([FromQuery]EntitySearchOptions options, [FromQuery]PagingOptions paging)
+        {
+            var users = await _users.GetUsersAsync(x => (options.Id != null || x.Id == options.Id), paging.Offset, paging.Limit);
+            if (users.Count() > 0)
+            {
+                switch (options.Sort)
+                {
+                    case SortBy.CreatedAt:
+                        users = users.OrderBy(x => x.CreatedAt);
+                        break;
+                    case SortBy.UpdatedAt:
+                        users = users.OrderBy(x => x.UpdatedAt);
+                        break;
+                    case SortBy.Name:
+                        users = users.OrderBy(x => x.Name);
+                        break;
+                    default:
+                        users = users.OrderBy(x => x.Id);
+                        break;
+                }
+                return Ok(users);
+            }
+            else
+            {
+                return NoContent();
+            }
         }
 
         [HttpGet("count", Name = nameof(GetUsersCountAsync))]
-        public async Task<IActionResult> GetUsersCountAsync(DateTime? createdAt = null)
+        public async Task<IActionResult> GetUsersCountAsync([FromQuery]EntitySearchOptions options)
         {
-            await Task.Delay(0);
-            return Ok();
+            int count = await _users.GetUsersCountAsync(x => (options.Id != null || x.Id == options.Id));
+            return Ok(count);
         }
     }
 }
