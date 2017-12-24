@@ -13,7 +13,7 @@ namespace Colliebot.Api.Rest.Controllers.Collie
             _users = users;
         }
 
-        [HttpGet("{id}", Name = nameof(GetUserAsync))]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetUserAsync(ulong id, params UserInclude[] include)
         {
             var user = await _users.GetUserAsync(id, include);

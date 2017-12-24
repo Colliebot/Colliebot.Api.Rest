@@ -16,7 +16,7 @@ namespace Colliebot.Api.Rest.Controllers.Discord
             _guildUsers = guildUsers;
         }
 
-        [HttpGet("{id}", Name = nameof(GetGuildAsync))]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetGuildAsync(ulong id, params DiscordGuildInclude[] include)
         {
             var guild = await _guilds.GetGuildAsync(id, include);
@@ -26,21 +26,21 @@ namespace Colliebot.Api.Rest.Controllers.Discord
                 return NotFound();
         }
 
-        [HttpPatch("{id}", Name = nameof(PatchGuildAsync))]
+        [HttpPatch("{id}")]
         public async Task<IActionResult> PatchGuildAsync(ulong id, [FromBody]object changes)
         {
             await Task.Delay(0);
             return Ok();
         }
 
-        [HttpDelete("{id}", Name = nameof(DeleteGuildAsync))]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGuildAsync(ulong id)
         {
             await Task.Delay(0);
             return Ok();
         }
 
-        [HttpGet("{id}/users", Name = nameof(GetGuildUsersAsync))]
+        [HttpGet("{id}/users")]
         public async Task<IActionResult> GetGuildUsersAsync(ulong id, [FromQuery]PagingOptions paging)
         {
             var guildExists = await _guilds.GuildExistsAsync(id);
@@ -54,7 +54,7 @@ namespace Colliebot.Api.Rest.Controllers.Discord
                 return Ok();
         }
         
-        [HttpGet("{id}/users/count", Name = nameof(GetGuildUserCountAsync))]
+        [HttpGet("{id}/users/count")]
         public async Task<IActionResult> GetGuildUserCountAsync(ulong id)
         {
             int count = await _guildUsers.GetGuildUsersCountAsync(x => x.GuildId == id);

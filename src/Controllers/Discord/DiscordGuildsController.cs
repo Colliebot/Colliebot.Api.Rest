@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,7 +14,7 @@ namespace Colliebot.Api.Rest.Controllers.Discord
             _guilds = guilds;
         }
 
-        [HttpGet(Name = nameof(GetGuildsAsync))]
+        [HttpGet]
         public async Task<IActionResult> GetGuildsAsync([FromQuery]EntitySearchOptions options, [FromQuery]PagingOptions paging)
         {
             var guilds = await _guilds.GetGuildsAsync(x => (options.Id != null || x.Id == options.Id), paging.Offset, paging.Limit);
@@ -44,10 +43,10 @@ namespace Colliebot.Api.Rest.Controllers.Discord
             }
         }
 
-        [HttpGet("count", Name = nameof(GetGuildsCountAsync))]
+        [HttpGet("count")]
         public async Task<IActionResult> GetGuildsCountAsync([FromQuery]EntitySearchOptions options)
         {
-            int count = await _guilds.GetGuildsCountAsync(x => (options.Id != null || x.Id == options.Id));
+            int count = await _guilds.GetGuildsCountAsync(x => true);
             return Ok(count);
         }
     }

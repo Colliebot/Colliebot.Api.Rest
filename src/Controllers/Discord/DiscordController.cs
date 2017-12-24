@@ -7,7 +7,7 @@ namespace Colliebot.Api.Rest.Controllers.Discord
     public class TwitchController : Controller
     {
         // Get overall stats for collie's discord stuff
-        [HttpGet(Name = nameof(GetDiscordAsync))]
+        [HttpGet]
         public async Task<IActionResult> GetDiscordAsync()
         {
             await Task.Delay(0);

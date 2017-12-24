@@ -14,8 +14,8 @@ namespace Colliebot.Api.Rest.Controllers.Discord
             _users = users;
         }
 
-        [HttpGet(Name = nameof(GetUsersAsync))]
-        public async Task<IActionResult> GetUsersAsync([FromQuery]EntitySearchOptions options, [FromQuery]PagingOptions paging)
+        [HttpGet]
+        public async Task<IActionResult> GetDiscordUsersAsync([FromQuery]EntitySearchOptions options, [FromQuery]PagingOptions paging)
         {
             var users = await _users.GetUsersAsync(x => (options.Id != null || x.Id == options.Id), paging.Offset, paging.Limit);
             if (users.Count() > 0)
@@ -43,8 +43,8 @@ namespace Colliebot.Api.Rest.Controllers.Discord
             }
         }
 
-        [HttpGet("count", Name = nameof(GetUsersCountAsync))]
-        public async Task<IActionResult> GetUsersCountAsync([FromQuery]EntitySearchOptions options)
+        [HttpGet("count")]
+        public async Task<IActionResult> GetDiscordUsersCountAsync([FromQuery]EntitySearchOptions options)
         {
             int count = await _users.GetUsersCountAsync(x => (options.Id != null || x.Id == options.Id));
             return Ok(count);
