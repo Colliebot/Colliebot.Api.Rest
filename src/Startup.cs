@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -27,6 +28,10 @@ namespace Colliebot.Api.Rest
         {
             services.AddSingleton(Configuration);
             services.AddRouting(options => options.LowercaseUrls = true);
+            services.Configure<GzipCompressionProviderOptions>(options =>
+            {
+                options.Level = System.IO.Compression.CompressionLevel.Optimal;
+            });
 
             services.AddMvc(options => options.ValueProviderFactories.AddDelimitedValueProviderFactory(',', '|'))
             .AddJsonOptions(options =>
@@ -82,6 +87,7 @@ namespace Colliebot.Api.Rest
             loggerFactory.AddDebug();
 
             app.UseMvc();
+            app.UseResponseCompression();
         }
     }
 }
