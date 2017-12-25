@@ -15,7 +15,7 @@ namespace Colliebot.Api.Rest.Controllers.Discord
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetGuildsAsync([FromQuery]EntitySearchOptions options, [FromQuery]PagingOptions paging)
+        public async Task<IActionResult> GetAsync([FromQuery]EntitySearchOptions options, [FromQuery]PagingOptions paging)
         {
             var guilds = await _guilds.GetGuildsAsync(x => (options.Id != null || x.Id == options.Id), paging.Offset, paging.Limit);
             if (guilds.Count() > 0)
@@ -44,9 +44,9 @@ namespace Colliebot.Api.Rest.Controllers.Discord
         }
 
         [HttpGet("count")]
-        public async Task<IActionResult> GetGuildsCountAsync([FromQuery]EntitySearchOptions options)
+        public async Task<IActionResult> GetCountAsync([FromQuery]EntitySearchOptions options)
         {
-            int count = await _guilds.GetGuildsCountAsync(x => true);
+            int count = await _guilds.CountAsync(x => true);
             return Ok(count);
         }
     }

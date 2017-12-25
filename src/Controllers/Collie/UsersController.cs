@@ -15,7 +15,7 @@ namespace Colliebot.Api.Rest.Controllers.Collie
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsersAsync([FromQuery]EntitySearchOptions options, [FromQuery]PagingOptions paging)
+        public async Task<IActionResult> GetAsync([FromQuery]EntitySearchOptions options, [FromQuery]PagingOptions paging)
         {
             var users = await _users.GetUsersAsync(x => (options.Id != null || x.Id == options.Id), paging.Offset, paging.Limit);
             if (users.Count() > 0)
@@ -44,9 +44,9 @@ namespace Colliebot.Api.Rest.Controllers.Collie
         }
 
         [HttpGet("count")]
-        public async Task<IActionResult> GetUsersCountAsync([FromQuery]EntitySearchOptions options)
+        public async Task<IActionResult> GetCountAsync([FromQuery]EntitySearchOptions options)
         {
-            int count = await _users.GetUsersCountAsync(x => (options.Id != null || x.Id == options.Id));
+            int count = await _users.CountAsync(x => (options.Id != null || x.Id == options.Id));
             return Ok(count);
         }
     }

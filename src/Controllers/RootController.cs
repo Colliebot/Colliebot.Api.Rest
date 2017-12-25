@@ -5,8 +5,8 @@ namespace Colliebot.Api.Rest.Controllers
 {
     public class RootController : Controller
     {
-        // Get general stats for all of collie's stuff
-        [HttpGet(Name = nameof(GetRootAsync))]
+        // Get information about the currently authenticated user
+        [HttpGet]
         public async Task<IActionResult> GetRootAsync()
         {
             await Task.Delay(0);

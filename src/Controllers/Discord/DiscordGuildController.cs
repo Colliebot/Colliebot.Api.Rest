@@ -17,33 +17,43 @@ namespace Colliebot.Api.Rest.Controllers.Discord
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetGuildAsync(ulong id, params DiscordGuildInclude[] include)
+        public async Task<IActionResult> GetAsync(ulong id, params DiscordGuildInclude[] include)
         {
-            var guild = await _guilds.GetGuildAsync(id, include);
+            var guild = await _guilds.GetAsync(id, include);
             if (guild != null)
                 return Ok(guild);
             else
                 return NotFound();
         }
 
+        [HttpGet("{id}/modified")]
+        public async Task<IActionResult> GetModifiedAsync(ulong id)
+        {
+            var updatedAt = await _guilds.GetLastUpdatedAsync(id);
+            if (updatedAt != null)
+                return Ok(updatedAt);
+            else
+                return NotFound();
+        }
+
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchGuildAsync(ulong id, [FromBody]object changes)
+        public async Task<IActionResult> PatchAsync(ulong id, [FromBody]object changes)
         {
             await Task.Delay(0);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGuildAsync(ulong id)
+        public async Task<IActionResult> DeleteAsync(ulong id)
         {
             await Task.Delay(0);
             return Ok();
         }
 
         [HttpGet("{id}/users")]
-        public async Task<IActionResult> GetGuildUsersAsync(ulong id, [FromQuery]PagingOptions paging)
+        public async Task<IActionResult> GetUsersAsync(ulong id, [FromQuery]PagingOptions paging)
         {
-            var guildExists = await _guilds.GuildExistsAsync(id);
+            var guildExists = await _guilds.ExistsAsync(id);
             if (!guildExists)
                 return NotFound();
 
@@ -55,9 +65,9 @@ namespace Colliebot.Api.Rest.Controllers.Discord
         }
         
         [HttpGet("{id}/users/count")]
-        public async Task<IActionResult> GetGuildUserCountAsync(ulong id)
+        public async Task<IActionResult> GetUsersCountAsync(ulong id)
         {
-            int count = await _guildUsers.GetGuildUsersCountAsync(x => x.GuildId == id);
+            int count = await _guildUsers.CountAsync(x => x.GuildId == id);
             return Ok(count);
         }
     }

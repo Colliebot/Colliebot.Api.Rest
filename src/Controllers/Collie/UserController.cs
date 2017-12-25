@@ -14,11 +14,21 @@ namespace Colliebot.Api.Rest.Controllers.Collie
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserAsync(ulong id, params UserInclude[] include)
+        public async Task<IActionResult> GetAsync(ulong id, params UserInclude[] include)
         {
-            var user = await _users.GetUserAsync(id, include);
+            var user = await _users.GetAsync(id, include);
             if (user != null)
                 return Ok(user);
+            else
+                return NotFound();
+        }
+
+        [HttpGet("{id}/modified")]
+        public async Task<IActionResult> GetModifiedAsync(ulong id)
+        {
+            var updatedAt = await _users.GetLastUpdatedAsync(id);
+            if (updatedAt != null)
+                return Ok(updatedAt);
             else
                 return NotFound();
         }
